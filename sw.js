@@ -1,5 +1,5 @@
 /* Offline-Speicher der Fitness-App. Nur eigene Dateien, keine fremden Adressen. */
-var CACHE = 'fitness-carsten-2026-10-14-6';
+var CACHE = 'fitness-carsten-2026-10-14-7';
 var FILES = [
   './', './index.html', './styles.css', './data.js', './core.js', './app.js', './videos.json',
   './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png'

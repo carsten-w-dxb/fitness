@@ -9,7 +9,7 @@
   var STORE_KEY = 'fitness-carsten-v1';
   var SESSIONS = ['OA', 'UA', 'MI', 'OB', 'UB'];
   // Ausdauer/Schritte (Carsten 14.10.2026: Werte von der Huawei-Uhr von Hand eintragen). Zahlen nur aus dem Plan:
-  var STEP_GOAL = 15000;               // „Schritte beibehalten: möglichst weiter 15.000+ am Tag“
+  var STEP_GOAL = 10000;               // Carsten 14.10.2026: „Macht 10.000 Schritte als Tagesziel.“ (Plan vorher 15.000+)
   var HR_LOW = 100, HR_HIGH = 120;     // Mittwoch: „Puls etwa 100–120“
   var CARDIO_TYPES = ['bike', 'stepper', 'walk', 'treadmill', 'other'];
   var STEPS_MAX = 150000;
@@ -73,7 +73,7 @@
       unitSave: 'Einheit speichern', unitUpdate: 'Änderung speichern', cancel: 'Abbrechen', edit: 'Ändern',
       unitSaved: 'Einheit gespeichert.', unitBad: 'Bitte Art und Dauer (Minuten) eintragen. Puls 30–230, Distanz und Kalorien als Zahl.',
       confirmDelUnit: 'Diese Einheit löschen?', unitsDay: 'Einheiten an diesem Tag', unitsWeek: 'Weitere Einheiten dieser Woche', noUnits: 'Noch keine Einheiten.',
-      weekOverview: 'Wochenübersicht', stepsAvg: 'Schritte Ø', stepsGoal: 'Ziel laut Plan: {n}+ am Tag',
+      weekOverview: 'Wochenübersicht', stepsAvg: 'Schritte Ø', stepsGoal: 'Tagesziel: {n}+ Schritte',
       stepsOk: 'Ziel erreicht', stepsUnder: 'unter {n}', daysEntered: '{n} von 7 Tagen eingetragen', noStepsWeek: 'Diese Woche noch keine Schritte eingetragen.',
       wedCardio: 'Mittwochs-Cardio', cardioTarget: 'Vorgabe Woche {w}: {m} Min.', cardioOf: '{a} von {m} Min.',
       hrPlan: 'Plan: Puls etwa {lo}–{hi}', hrIn: 'im Bereich {lo}–{hi}', hrAbove: 'darüber', hrBelow: 'darunter', hrNone: 'kein Puls eingetragen',
@@ -139,7 +139,7 @@
       unitSave: 'Save session', unitUpdate: 'Save changes', cancel: 'Cancel', edit: 'Edit',
       unitSaved: 'Session saved.', unitBad: 'Please enter the type and duration (minutes). Heart rate 30–230, distance and calories as numbers.',
       confirmDelUnit: 'Delete this session?', unitsDay: 'Sessions on this day', unitsWeek: 'Other sessions this week', noUnits: 'No sessions yet.',
-      weekOverview: 'Week overview', stepsAvg: 'Avg steps', stepsGoal: 'Plan target: {n}+ a day',
+      weekOverview: 'Week overview', stepsAvg: 'Avg steps', stepsGoal: 'Daily target: {n}+ steps',
       stepsOk: 'target reached', stepsUnder: 'below {n}', daysEntered: '{n} of 7 days entered', noStepsWeek: 'No steps entered this week yet.',
       wedCardio: 'Wednesday cardio', cardioTarget: 'Week {w} target: {m} min', cardioOf: '{a} of {m} min',
       hrPlan: 'Plan: heart rate about {lo}–{hi}', hrIn: 'in the {lo}–{hi} range', hrAbove: 'above', hrBelow: 'below', hrNone: 'no heart rate entered',
