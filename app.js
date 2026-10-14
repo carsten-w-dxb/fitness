@@ -103,6 +103,16 @@
     var act = el.getAttribute('data-act'), d = el.dataset;
     ui.msg = '';
     switch (act) {
+      case 'video':
+        // Einzeldatei: normaler Link zu YouTube. Web-App: genau dieses Video im Fenster der App.
+        if (window.FITNESS_SINGLE_FILE || !/^https?:$/.test(location.protocol)) return;
+        if (ev.preventDefault) ev.preventDefault();
+        ui.video = { ex: d.ex, k: d.k };
+        try { history.pushState({ video: 1 }, ''); } catch (e) { /* egal */ }
+        render(true); return;
+      case 'videoclose':
+        if (history.state && history.state.video) { history.back(); return; } // schließt über popstate
+        ui.video = null; render(true); return;
       case 'tab': ui.tab = d.v; ui.open = {}; render(false); return;
       case 'date': ui.date = d.date; render(true); return;
       case 'session': C.setSession(state, ui.date, d.sid || null); persist(); render(true); return;
@@ -186,6 +196,11 @@
   });
 
   // Tageswechsel (App bleibt offen über Mitternacht)
+  // Zurück-Taste (Android) schließt das Video statt die App
+  window.addEventListener('popstate', function () {
+    if (ui.video) { ui.video = null; render(true); }
+  });
+
   setInterval(function () {
     var nd = C.dateKey(new Date());
     if (nd !== ui.today) { if (ui.date === ui.today) ui.date = nd; ui.today = nd; render(true); }
