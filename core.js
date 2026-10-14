@@ -47,7 +47,8 @@
       confirmImport: 'Import ersetzt alle Daten in der App durch die Datei. Weiter?',
       confirmWipe: 'Wirklich alle Trainings-, Körper- und Einkaufsdaten auf diesem Handy löschen?',
       importOk: 'Import fertig.', importFail: 'Import nicht möglich: ', exported: 'Export erstellt.',
-      planInfo: 'Der Plan', videos: 'Videos', videoNote: 'Die Links öffnen YouTube. Nur dafür braucht die App Internet.',
+      planInfo: 'Der Plan', videos: 'Videos', videoNote: 'Die Videos laufen direkt in der App (über YouTube, ohne Cookies). Nur dafür braucht die App Internet.',
+      openYoutube: 'Auf YouTube öffnen', closeVideo: 'Video schließen',
       on: 'an', off: 'aus', version: 'Version', storageWarn: 'Speichern im Browser ist hier nicht möglich. Bitte exportieren.',
       today: 'heute', prevWeek: 'Woche', nextWeek: 'Woche', planOver: 'Danach folgt eine leichtere Woche (halbe Satzzahl, gleiche Gewichte), dann Block 2.'
     },
@@ -87,7 +88,8 @@
       confirmImport: 'Importing replaces all data in the app with the file. Continue?',
       confirmWipe: 'Really delete all training, body and shopping data on this phone?',
       importOk: 'Import complete.', importFail: 'Import not possible: ', exported: 'Export created.',
-      planInfo: 'The plan', videos: 'Videos', videoNote: 'The links open YouTube. That is the only thing the app needs the internet for.',
+      planInfo: 'The plan', videos: 'Videos', videoNote: 'The videos play right inside the app (via YouTube, without cookies). That is the only thing the app needs the internet for.',
+      openYoutube: 'Open on YouTube', closeVideo: 'Close video',
       on: 'on', off: 'off', version: 'Version', storageWarn: 'Saving in the browser is not possible here. Please export.',
       today: 'today', prevWeek: 'Week', nextWeek: 'Week', planOver: 'After that comes a lighter week (half the number of sets, same weights), then block 2.'
     }
@@ -441,6 +443,33 @@
     return '<button type="button" class="' + (cls || 'btn') + '" data-act="' + act + '"' + (attrs || '') + '>' + label + '</button>';
   }
   function a(name, val) { return ' data-' + name + '="' + esc(val) + '"'; }
+  // Videos in der App abspielen: YouTube ohne Cookies, erst nach Tippen; nur genau das hinterlegte Video.
+  // Die Einzeldatei (file://) öffnet stattdessen den YouTube-Link (app.js).
+  var EMBED = 'https://www.youtube-nocookie.com/embed/';
+  function videoId(url) {
+    var m = /^https:\/\/www\.youtube\.com\/watch\?v=([A-Za-z0-9_-]{11})$/.exec(url || '');
+    return m ? m[1] : null;
+  }
+  function videoOf(exId, k) { return PLAN.videos[k === 'alt' ? exId + ':alt' : exId] || null; }
+  function videoLink(state, exId, k, label, cls) {
+    var v = videoOf(exId, k);
+    return '<a' + (cls ? ' class="' + cls + '"' : '') + ' href="' + esc(v.url) + '" target="_blank" rel="noopener noreferrer" data-act="video"' +
+      a('ex', exId) + a('k', k) + '>' + label + '</a>';
+  }
+  function viewVideo(state, ui) {
+    if (!ui.video) return '';
+    var v = videoOf(ui.video.ex, ui.video.k), id = v && videoId(v.url), ex = findExercise(ui.video.ex);
+    if (!id || !ex) return '';
+    return '<div class="vmodal" role="dialog" aria-modal="true" aria-label="' + esc(L(state, ex.name)) + '"><div class="vbox">' +
+      '<div class="vhead"><b>' + esc(L(state, ex.name)) + '</b>' +
+      btn('videoclose', '✕', ' aria-label="' + esc(t(state, 'closeVideo')) + '"', 'btn small ghost') + '</div>' +
+      '<div class="vframe"><iframe src="' + EMBED + id + '?rel=0&amp;playsinline=1&amp;autoplay=1" title="' + esc(v.title) + '"' +
+      ' allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>' +
+      '<p class="muted small">' + esc(v.title) + ' (' + esc(v.channel) + ')</p>' +
+      '<div class="row gap">' + btn('videoclose', esc(t(state, 'closeVideo')), '', 'btn small') +
+      '<a class="btn small ghost" href="' + esc(v.url) + '" target="_blank" rel="noopener noreferrer">' + esc(t(state, 'openYoutube')) + '</a></div>' +
+      '</div></div>';
+  }
   function details(title, html, open) {
     return '<details class="card info"' + (open ? ' open' : '') + '><summary>' + esc(title) + '</summary><div class="plantext">' + html + '</div></details>';
   }
@@ -545,8 +574,8 @@
     h += '</div><div class="row gap">' + btn('addset', esc(t(state, 'addSet')), a('ex', ex.id), 'btn small ghost') +
       (sets.length ? btn('rmset', esc(t(state, 'removeSet')), a('ex', ex.id), 'btn small ghost') : '') +
       btn('timer', esc(t(state, 'rest')) + ' ' + ex.rest + ' s', a('sec', ex.rest), 'btn small ghost') +
-      (vid ? '<a class="btn small vid" href="' + esc(vid.url) + '" target="_blank" rel="noopener noreferrer">' + esc(t(state, 'video')) + (alt ? ' 1' : '') + '</a>' : '<span class="muted small vid">' + esc(t(state, 'noVideo')) + '</span>') +
-      (alt ? '<a class="btn small vid" href="' + esc(alt.url) + '" target="_blank" rel="noopener noreferrer">' + esc(t(state, 'video')) + ' 2</a>' : '') +
+      (vid ? videoLink(state, ex.id, 'main', esc(t(state, 'video')) + (alt ? ' 1' : ''), 'btn small vid') : '<span class="muted small vid">' + esc(t(state, 'noVideo')) + '</span>') +
+      (alt ? videoLink(state, ex.id, 'alt', esc(t(state, 'video')) + ' 2', 'btn small vid') : '') +
       '</div>' + (alt ? '<p class="muted small">' + esc(t(state, 'video')) + ' 1: ' + esc(vid.title) + ' · ' + esc(t(state, 'video')) + ' 2: ' + esc(alt.title) + '</p>' : '') + '</section>';
     void lang;
     return h;
@@ -702,8 +731,8 @@
     SESSIONS.forEach(function (sid) {
       exercisesOf(sid).forEach(function (ex) {
         var v = PLAN.videos[ex.id], v2 = PLAN.videos[ex.id + ':alt'];
-        function one(x) { return '<a href="' + esc(x.url) + '" target="_blank" rel="noopener noreferrer">' + esc(x.title) + '</a> <small>(' + esc(x.channel) + ')</small>'; }
-        vl += '<li><b>' + esc(L(state, ex.name)) + '</b><br>' + (v ? one(v) : '<small>' + esc(t(state, 'noVideo')) + '</small>') + (v2 ? '<br>' + one(v2) : '') + '</li>';
+        function one(x, k) { return videoLink(state, ex.id, k, esc(x.title), '') + ' <small>(' + esc(x.channel) + ')</small>'; }
+        vl += '<li><b>' + esc(L(state, ex.name)) + '</b><br>' + (v ? one(v, 'main') : '<small>' + esc(t(state, 'noVideo')) + '</small>') + (v2 ? '<br>' + one(v2, 'alt') : '') + '</li>';
       });
     });
     h += details(t(state, 'videos'), '<p class="small">' + esc(t(state, 'videoNote')) + '</p><ul class="vids">' + vl + '</ul>', false);
@@ -738,6 +767,7 @@
     h += '<nav class="tabs">' + TABS.map(function (x) {
       return '<button type="button" class="tab' + (x[0] === ui.tab ? ' on' : '') + '" data-act="tab"' + a('v', x[0]) + '>' + icon(x[0]) + '<small>' + esc(t(state, x[1])) + '</small></button>';
     }).join('') + '</nav>';
+    h += viewVideo(state, ui);
     return h;
   }
 
@@ -752,7 +782,7 @@
     timerStart: timerStart, timerRemaining: timerRemaining, timerAdd: timerAdd, fmtClock: fmtClock,
     saveBody: saveBody, deleteBody: deleteBody, series: series, avg7: avg7, chartSVG: chartSVG,
     shopToggle: shopToggle, shopKeys: shopKeys, shopReset: shopReset, shopCount: shopCount,
-    render: render, viewTimer: viewTimer
+    render: render, viewTimer: viewTimer, viewVideo: viewVideo, videoId: videoId, EMBED: EMBED
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = Core; else root.Core = Core;
 })(this);
