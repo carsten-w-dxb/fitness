@@ -40,6 +40,10 @@
       confirmDelEntry: 'Diesen Eintrag löschen?', noEntries: 'Noch keine Einträge.', avg7: 'Ø 7 Tage',
       chartEmpty: 'Für die Kurve fehlen noch Werte.', progress: 'Fortschritt messen', signs: 'Woran du siehst, dass es läuft',
       enterValue: 'Bitte mindestens einen Wert eintragen.', saved: 'Gespeichert.',
+      navyTitle: 'Körperfett berechnen (US-Navy-Formel)', height: 'Größe', neck: 'Hals',
+      navyHint: 'Hals direkt unter dem Kehlkopf, Taille auf Nabelhöhe, morgens nüchtern. Die Formel schätzt; wichtig ist der Trend. Deine Größe merkt sich die App.',
+      navyBtn: 'Berechnen und eintragen', navyOk: 'Körperfett {bf} % eingetragen (Taille {w} cm).',
+      navyBad: 'Bitte Größe, Hals und Taille in cm eintragen (Taille größer als Hals).',
       settings: 'Einstellungen', language: 'Sprache', planStart: 'Planstart (Montag)', weekChoice: 'Woche',
       sound: 'Ton am Pausenende', vibrate: 'Vibration am Pausenende', autoTimer: 'Timer nach abgehaktem Satz starten',
       data: 'Daten', dataNote: 'Alle Eingaben bleiben nur auf diesem Handy (im Browser gespeichert). Für Handywechsel oder Sicherung: exportieren und die Datei aufheben.',
@@ -81,6 +85,10 @@
       confirmDelEntry: 'Delete this entry?', noEntries: 'No entries yet.', avg7: '7-day avg',
       chartEmpty: 'Not enough values for a chart yet.', progress: 'Tracking progress', signs: 'Signs that it is working',
       enterValue: 'Please enter at least one value.', saved: 'Saved.',
+      navyTitle: 'Calculate body fat (US Navy formula)', height: 'Height', neck: 'Neck',
+      navyHint: 'Neck just below the larynx, waist at navel height, in the morning before breakfast. The formula is an estimate; the trend is what counts. The app remembers your height.',
+      navyBtn: 'Calculate and save', navyOk: 'Body fat {bf} % saved (waist {w} cm).',
+      navyBad: 'Please enter height, neck and waist in cm (waist larger than neck).',
       settings: 'Settings', language: 'Language', planStart: 'Plan start (Monday)', weekChoice: 'Week',
       sound: 'Sound at the end of the rest', vibrate: 'Vibration at the end of the rest', autoTimer: 'Start the timer after ticking a set',
       data: 'Data', dataNote: 'Everything you enter stays on this phone only (stored in the browser). To change phones or keep a backup: export and keep the file.',
@@ -114,7 +122,7 @@
 
   // ------------------------------------------------------------ Zustand
   function defaultSettings() {
-    return { lang: 'de', start: PLAN.start, week: 0, sound: true, vibrate: true, autoTimer: true };
+    return { lang: 'de', start: PLAN.start, week: 0, sound: true, vibrate: true, autoTimer: true, height: null };
   }
   function emptyState() {
     return { schema: SCHEMA, settings: defaultSettings(), workouts: {}, body: [], shop: {} };
@@ -139,6 +147,7 @@
       if (isDate(ds.start)) s.settings.start = ds.start;
       if ([0, 1, 2, 3, 4].indexOf(ds.week) >= 0) s.settings.week = ds.week;
       ['sound', 'vibrate', 'autoTimer'].forEach(function (k) { if (typeof ds[k] === 'boolean') s.settings[k] = ds[k]; });
+      if (typeof ds.height === 'number' && ds.height >= 120 && ds.height <= 230) s.settings.height = ds.height;
     }
     if (data.workouts !== undefined) {
       if (!isObj(data.workouts)) throw new Error('Trainingsdaten fehlerhaft');
@@ -377,6 +386,22 @@
   }
   function deleteBody(state, date) {
     state.body = state.body.filter(function (b) { return b.date !== date; });
+  }
+  // US-Navy-Formel (Männer, cm): 495 / (1,0324 − 0,19077·log10(Taille − Hals) + 0,15456·log10(Größe)) − 450
+  function navyBf(height, neck, waist) {
+    var hgt = numOrNull(height), n = numOrNull(neck), w = numOrNull(waist);
+    if (hgt === null || n === null || w === null) return null;
+    if (hgt < 120 || hgt > 230 || n < 25 || n > 70 || w < 50 || w > 200 || w - n < 5) return null;
+    var bf = 495 / (1.0324 - 0.19077 * Math.log10(w - n) + 0.15456 * Math.log10(hgt)) - 450;
+    if (!isFinite(bf) || bf < 2 || bf > 60) return null;
+    return Math.round(bf * 10) / 10;
+  }
+  function saveNavy(state, entry) {
+    var bf = navyBf(entry.height, entry.neck, entry.waist);
+    if (bf === null || !isDate(entry.date)) throw new Error('Werte fehlen');
+    state.settings.height = numOrNull(entry.height);
+    saveBody(state, { date: entry.date, waist: numOrNull(entry.waist), bf: bf });
+    return bf;
   }
   function series(state, field) {
     return state.body.filter(function (b) { return b[field] !== null; }).map(function (b) { return { date: b.date, v: b[field] }; });
@@ -686,6 +711,14 @@
       '<label class="fld"><small>' + esc(t(state, 'bf')) + ' (%)</small><input type="number" inputmode="decimal" step="0.1" min="3" max="60" name="bf"></label>' +
       '<button type="submit" class="btn primary">' + esc(t(state, 'save')) + '</button>' +
       (ui.msg ? '<p class="msg">' + esc(ui.msg) + '</p>' : '') + '</form></section>';
+    h += '<section class="card"><h2>' + esc(t(state, 'navyTitle')) + '</h2><p class="small muted">' + esc(t(state, 'navyHint')) + '</p>' +
+      '<form class="bodyf" data-form="navy">' +
+      '<label class="fld wide"><small>' + esc(t(state, 'date')) + '</small><input type="date" name="date" value="' + esc(ui.today) + '" required></label>' +
+      '<label class="fld"><small>' + esc(t(state, 'height')) + ' (cm)</small><input type="number" inputmode="decimal" step="0.5" min="120" max="230" name="height" value="' + (state.settings.height === null ? '' : esc(state.settings.height)) + '"></label>' +
+      '<label class="fld"><small>' + esc(t(state, 'neck')) + ' (cm)</small><input type="number" inputmode="decimal" step="0.5" min="25" max="70" name="neck"></label>' +
+      '<label class="fld"><small>' + esc(t(state, 'waist')) + ' (cm)</small><input type="number" inputmode="decimal" step="0.5" min="50" max="200" name="waist"></label>' +
+      '<button type="submit" class="btn primary">' + esc(t(state, 'navyBtn')) + '</button>' +
+      (ui.navyMsg ? '<p class="msg">' + esc(ui.navyMsg) + '</p>' : '') + '</form></section>';
     h += '<section class="card">' + seg([['weight', t(state, 'weight')], ['waist', t(state, 'waist')], ['bf', t(state, 'bf')]], metric, 'metric', 'v');
     var pts = series(state, metric);
     h += chartSVG(state, pts, { avg: metric === 'weight' ? avg7(pts) : null, label: t(state, metric) });
@@ -780,7 +813,7 @@
     setField: setField, toggleDone: toggleDone, addSet: addSet, removeSet: removeSet, setSession: setSession,
     toggleExtra: toggleExtra, lastValues: lastValues, fmtSets: fmtSets,
     timerStart: timerStart, timerRemaining: timerRemaining, timerAdd: timerAdd, fmtClock: fmtClock,
-    saveBody: saveBody, deleteBody: deleteBody, series: series, avg7: avg7, chartSVG: chartSVG,
+    saveBody: saveBody, deleteBody: deleteBody, navyBf: navyBf, saveNavy: saveNavy, fmtNum: fmtNum, series: series, avg7: avg7, chartSVG: chartSVG,
     shopToggle: shopToggle, shopKeys: shopKeys, shopReset: shopReset, shopCount: shopCount,
     render: render, viewTimer: viewTimer, viewVideo: viewVideo, videoId: videoId, EMBED: EMBED
   };
