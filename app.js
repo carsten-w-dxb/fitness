@@ -9,7 +9,7 @@
 
   var state = C.load(store);
   var today = C.dateKey(new Date());
-  var ui = { tab: 'training', date: today, today: today, open: {}, timer: null, now: Date.now(), storageError: storageError };
+  var ui = { tab: 'training', date: today, today: today, cDate: today, open: {}, timer: null, now: Date.now(), storageError: storageError };
   try { // Timer und Ansicht überstehen ein Neuladen
     var saved = JSON.parse(sessionStorage.getItem('fitness-ui') || '{}');
     if (saved.tab) ui.tab = saved.tab;
@@ -101,7 +101,7 @@
     var el = ev.target.closest('[data-act]');
     if (!el || el.tagName === 'INPUT') return;
     var act = el.getAttribute('data-act'), d = el.dataset;
-    ui.msg = ''; ui.navyMsg = '';
+    ui.msg = ''; ui.navyMsg = ''; ui.sMsg = ''; ui.cMsg = '';
     switch (act) {
       case 'video':
         // Einzeldatei: normaler Link zu YouTube. Web-App: genau dieses Video im Fenster der App.
@@ -113,7 +113,25 @@
       case 'videoclose':
         if (history.state && history.state.video) { history.back(); return; } // schließt über popstate
         ui.video = null; render(true); return;
-      case 'tab': ui.tab = d.v; ui.open = {}; render(false); return;
+      case 'tab':
+        ui.tab = d.v; ui.open = {};
+        if (d.v === 'cardio') { ui.cDate = ui.today; ui.cEdit = null; }
+        render(false); return;
+      // Ausdauer: Tag wählen, Schritte löschen, Einheit ändern/löschen, vom Mittwoch im Training hierher
+      case 'cday': ui.cDate = d.date; ui.cEdit = null; render(true); return;
+      case 'gocardio': ui.tab = 'cardio'; ui.cDate = d.date; ui.cEdit = null; render(false); return;
+      case 'stepsdel':
+        if (confirm(C.t(state, 'confirmDelSteps').replace('{d}', C.fmtDate(state, d.date, true)))) { C.deleteSteps(state, d.date); persist(); render(true); }
+        return;
+      case 'cedit': {
+        var u = state.cardio.filter(function (x) { return x.id === d.id; })[0];
+        if (u) { ui.cEdit = u.id; ui.cDate = u.date; ui.cType = u.type; }
+        render(true); return;
+      }
+      case 'ccancel': ui.cEdit = null; render(true); return;
+      case 'cdel':
+        if (confirm(C.t(state, 'confirmDelUnit'))) { C.deleteUnit(state, d.id); if (ui.cEdit === d.id) ui.cEdit = null; persist(); render(true); }
+        return;
       case 'date': ui.date = d.date; render(true); return;
       case 'session': C.setSession(state, ui.date, d.sid || null); persist(); render(true); return;
       case 'done': {
@@ -165,6 +183,11 @@
       if (/^\d{4}-\d{2}-\d{2}$/.test(el.value)) { state.settings.start = el.value; persist(); render(true); }
       return;
     }
+    if (el.getAttribute('data-in') === 'cdate') {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(el.value)) { ui.cDate = el.value; ui.cEdit = null; ui.sMsg = ''; ui.cMsg = ''; render(true); }
+      return;
+    }
+    if (el.name === 'type' && el.type === 'radio') { ui.cType = el.value; return; }
     if (el.getAttribute('data-in')) { persist(); return; }
     if (act === 'shop') { C.shopToggle(state, el.dataset.key); persist(); render(true); return; }
     if (act === 'extra') { C.toggleExtra(state, ui.date, el.dataset.key); persist(); render(true); return; }
@@ -185,6 +208,24 @@
   });
   root.addEventListener('submit', function (ev) {
     var form = ev.target;
+    if (form.getAttribute('data-form') === 'steps') {
+      ev.preventDefault();
+      ui.cMsg = '';
+      try { C.setSteps(state, ui.cDate, new FormData(form).get('steps')); persist(); ui.sMsg = C.t(state, 'stepsSaved'); } catch (e) { ui.sMsg = C.t(state, 'stepsBad'); }
+      render(true);
+      return;
+    }
+    if (form.getAttribute('data-form') === 'cardio') {
+      ev.preventDefault();
+      ui.sMsg = '';
+      var fc = new FormData(form);
+      try {
+        C.saveUnit(state, { date: ui.cDate, type: fc.get('type'), min: fc.get('min'), hr: fc.get('hr'), km: fc.get('km'), kcal: fc.get('kcal'), note: fc.get('note') }, ui.cEdit || null);
+        persist(); ui.cEdit = null; ui.cMsg = C.t(state, 'unitSaved'); ui.cType = fc.get('type');
+      } catch (e) { ui.cMsg = C.t(state, 'unitBad'); }
+      render(true);
+      return;
+    }
     if (form.getAttribute('data-form') === 'navy') {
       ev.preventDefault();
       var fn = new FormData(form);
@@ -215,7 +256,7 @@
 
   setInterval(function () {
     var nd = C.dateKey(new Date());
-    if (nd !== ui.today) { if (ui.date === ui.today) ui.date = nd; ui.today = nd; render(true); }
+    if (nd !== ui.today) { if (ui.date === ui.today) ui.date = nd; if (ui.cDate === ui.today) ui.cDate = nd; ui.today = nd; render(true); }
   }, 60000);
 
   // Offline-Fähigkeit (nur bei http/https, nicht bei der Einzeldatei)

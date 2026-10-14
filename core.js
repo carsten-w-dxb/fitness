@@ -8,6 +8,11 @@
   var SCHEMA = 1;
   var STORE_KEY = 'fitness-carsten-v1';
   var SESSIONS = ['OA', 'UA', 'MI', 'OB', 'UB'];
+  // Ausdauer/Schritte (Carsten 14.10.2026: Werte von der Huawei-Uhr von Hand eintragen). Zahlen nur aus dem Plan:
+  var STEP_GOAL = 15000;               // „Schritte beibehalten: möglichst weiter 15.000+ am Tag“
+  var HR_LOW = 100, HR_HIGH = 120;     // Mittwoch: „Puls etwa 100–120“
+  var CARDIO_TYPES = ['bike', 'stepper', 'walk', 'treadmill', 'other'];
+  var STEPS_MAX = 150000;
 
   // ------------------------------------------------------------ Texte der Oberfläche
   var UI = {
@@ -54,7 +59,28 @@
       planInfo: 'Der Plan', videos: 'Videos', videoNote: 'Die Videos laufen direkt in der App (über YouTube, ohne Cookies). Nur dafür braucht die App Internet.',
       openYoutube: 'Auf YouTube öffnen', closeVideo: 'Video schließen',
       on: 'an', off: 'aus', version: 'Version', storageWarn: 'Speichern im Browser ist hier nicht möglich. Bitte exportieren.',
-      today: 'heute', prevWeek: 'Woche', nextWeek: 'Woche', planOver: 'Danach folgt eine leichtere Woche (halbe Satzzahl, gleiche Gewichte), dann Block 2.'
+      today: 'heute', prevWeek: 'Woche', nextWeek: 'Woche', planOver: 'Danach folgt eine leichtere Woche (halbe Satzzahl, gleiche Gewichte), dann Block 2.',
+      tabCardio: 'Ausdauer',
+      huaweiNote: 'Werte von der Huawei-Uhr ablesen und hier eintragen. Eine automatische Übernahme ist mit dieser Web-App nicht möglich.',
+      stepsTitle: 'Schritte', stepsLabel: 'Schritte am {d}', stepsSave: 'Schritte speichern', stepsSaved: 'Schritte gespeichert.',
+      stepsBad: 'Bitte die Schritte als ganze Zahl eintragen (z. B. 16240).', stepsDel: 'Schritte löschen', confirmDelSteps: 'Schritte vom {d} löschen?',
+      stepsNone: 'Für diesen Tag sind noch keine Schritte eingetragen.', stepsHave: 'Eingetragen: {n} Schritte.',
+      prevDay: 'Vortag', nextDay: 'Folgetag',
+      unitTitle: 'Ausdauer-Einheit', unitOn: 'am {d}', type: 'Art',
+      types: { bike: 'Fahrrad', stepper: 'Stepper', walk: 'Gehen', treadmill: 'Laufband', other: 'Sonstiges' },
+      duration: 'Dauer', durationUnit: 'Min.', avgHr: 'Ø Herzfrequenz', hrUnit: 'bpm', distance: 'Distanz', kmUnit: 'km',
+      activeKcal: 'Aktive Kalorien', kcalUnit: 'kcal', note: 'Notiz', optional: 'optional',
+      unitSave: 'Einheit speichern', unitUpdate: 'Änderung speichern', cancel: 'Abbrechen', edit: 'Ändern',
+      unitSaved: 'Einheit gespeichert.', unitBad: 'Bitte Art und Dauer (Minuten) eintragen. Puls 30–230, Distanz und Kalorien als Zahl.',
+      confirmDelUnit: 'Diese Einheit löschen?', unitsDay: 'Einheiten an diesem Tag', unitsWeek: 'Weitere Einheiten dieser Woche', noUnits: 'Noch keine Einheiten.',
+      weekOverview: 'Wochenübersicht', stepsAvg: 'Schritte Ø', stepsGoal: 'Ziel laut Plan: {n}+ am Tag',
+      stepsOk: 'Ziel erreicht', stepsUnder: 'unter {n}', daysEntered: '{n} von 7 Tagen eingetragen', noStepsWeek: 'Diese Woche noch keine Schritte eingetragen.',
+      wedCardio: 'Mittwochs-Cardio', cardioTarget: 'Vorgabe Woche {w}: {m} Min.', cardioOf: '{a} von {m} Min.',
+      hrPlan: 'Plan: Puls etwa {lo}–{hi}', hrIn: 'im Bereich {lo}–{hi}', hrAbove: 'darüber', hrBelow: 'darunter', hrNone: 'kein Puls eingetragen',
+      avgHrShort: 'Ø Puls', noCardioDay: 'Am Cardio-Tag ist noch keine Einheit eingetragen.',
+      cardioRule: 'Gezählt werden die Einheiten am Cardio-Tag (Mittwoch oder der Tag, auf den du die Einheit im Training gelegt hast), außer „Gehen“. Gehen zählt zu den Schritten.',
+      finisherHere: 'Den Finisher am Freitag (ab Woche 2) trägst du im Training ein, nicht hier.',
+      allWeeks: 'Alle 4 Wochen', cardioShort: 'Cardio Mi', cardioEnter: 'Ausdauer eintragen', cardioEntered: 'Eingetragen: {a} Min.'
     },
     en: {
       appName: 'Fitness Carsten', tabTraining: 'Training', tabFood: 'Nutrition', tabShop: 'Shopping',
@@ -99,7 +125,28 @@
       planInfo: 'The plan', videos: 'Videos', videoNote: 'The videos play right inside the app (via YouTube, without cookies). That is the only thing the app needs the internet for.',
       openYoutube: 'Open on YouTube', closeVideo: 'Close video',
       on: 'on', off: 'off', version: 'Version', storageWarn: 'Saving in the browser is not possible here. Please export.',
-      today: 'today', prevWeek: 'Week', nextWeek: 'Week', planOver: 'After that comes a lighter week (half the number of sets, same weights), then block 2.'
+      today: 'today', prevWeek: 'Week', nextWeek: 'Week', planOver: 'After that comes a lighter week (half the number of sets, same weights), then block 2.',
+      tabCardio: 'Endurance',
+      huaweiNote: 'Read the values from the Huawei watch and enter them here. Automatic transfer is not possible with this web app.',
+      stepsTitle: 'Steps', stepsLabel: 'Steps on {d}', stepsSave: 'Save steps', stepsSaved: 'Steps saved.',
+      stepsBad: 'Please enter the steps as a whole number (e.g. 16240).', stepsDel: 'Delete steps', confirmDelSteps: 'Delete the steps for {d}?',
+      stepsNone: 'No steps entered for this day yet.', stepsHave: 'Entered: {n} steps.',
+      prevDay: 'Previous day', nextDay: 'Next day',
+      unitTitle: 'Endurance session', unitOn: 'on {d}', type: 'Type',
+      types: { bike: 'Bike', stepper: 'Stepper', walk: 'Walk', treadmill: 'Treadmill', other: 'Other' },
+      duration: 'Duration', durationUnit: 'min', avgHr: 'Avg heart rate', hrUnit: 'bpm', distance: 'Distance', kmUnit: 'km',
+      activeKcal: 'Active calories', kcalUnit: 'kcal', note: 'Note', optional: 'optional',
+      unitSave: 'Save session', unitUpdate: 'Save changes', cancel: 'Cancel', edit: 'Edit',
+      unitSaved: 'Session saved.', unitBad: 'Please enter the type and duration (minutes). Heart rate 30–230, distance and calories as numbers.',
+      confirmDelUnit: 'Delete this session?', unitsDay: 'Sessions on this day', unitsWeek: 'Other sessions this week', noUnits: 'No sessions yet.',
+      weekOverview: 'Week overview', stepsAvg: 'Avg steps', stepsGoal: 'Plan target: {n}+ a day',
+      stepsOk: 'target reached', stepsUnder: 'below {n}', daysEntered: '{n} of 7 days entered', noStepsWeek: 'No steps entered this week yet.',
+      wedCardio: 'Wednesday cardio', cardioTarget: 'Week {w} target: {m} min', cardioOf: '{a} of {m} min',
+      hrPlan: 'Plan: heart rate about {lo}–{hi}', hrIn: 'in the {lo}–{hi} range', hrAbove: 'above', hrBelow: 'below', hrNone: 'no heart rate entered',
+      avgHrShort: 'Avg HR', noCardioDay: 'No session entered on the cardio day yet.',
+      cardioRule: 'Counted: the sessions on the cardio day (Wednesday, or the day you moved that session to under Training), except “Walk”. Walking counts towards the steps.',
+      finisherHere: 'Enter the Friday finisher (from week 2) under Training, not here.',
+      allWeeks: 'All 4 weeks', cardioShort: 'Cardio Wed', cardioEnter: 'Enter endurance', cardioEntered: 'Entered: {a} min'
     }
   };
 
@@ -125,7 +172,8 @@
     return { lang: 'de', start: PLAN.start, week: 0, sound: true, vibrate: true, autoTimer: true, height: null };
   }
   function emptyState() {
-    return { schema: SCHEMA, settings: defaultSettings(), workouts: {}, body: [], shop: {} };
+    // steps und cardio kamen am 14.10.2026 dazu (Speicherformat nur erweitert; ältere Stände haben sie nicht).
+    return { schema: SCHEMA, settings: defaultSettings(), workouts: {}, body: [], shop: {}, steps: {}, cardio: [] };
   }
   function isObj(x) { return x !== null && typeof x === 'object' && !Array.isArray(x); }
   function isDate(s) { return typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s) && !isNaN(Date.parse(s + 'T12:00:00Z')); }
@@ -191,15 +239,37 @@
       if (!isObj(data.shop)) throw new Error('Einkaufsliste fehlerhaft');
       Object.keys(data.shop).forEach(function (k) { if (data.shop[k] === true) s.shop[k] = true; });
     }
+    if (data.steps !== undefined) { // fehlt in älteren Ständen/Exporten: dann einfach leer
+      if (!isObj(data.steps)) throw new Error('Schritte fehlerhaft');
+      Object.keys(data.steps).sort().forEach(function (d) {
+        var v = data.steps[d];
+        if (!isDate(d) || typeof v !== 'number' || !isFinite(v) || v < 0 || v > STEPS_MAX || Math.round(v) !== v) throw new Error('Schritte fehlerhaft: ' + d);
+        s.steps[d] = v;
+      });
+    }
+    if (data.cardio !== undefined) {
+      if (!Array.isArray(data.cardio)) throw new Error('Ausdauer fehlerhaft');
+      var ids = {};
+      data.cardio.forEach(function (c) {
+        var e = cleanUnit(c);
+        if (ids[e.id]) throw new Error('Ausdauer doppelt: ' + e.id);
+        ids[e.id] = true;
+        s.cardio.push(e);
+      });
+      sortUnits(s.cardio);
+    }
     return s;
   }
 
   function load(storage) {
+    var raw = null;
     try {
-      var raw = storage.getItem(STORE_KEY);
+      raw = storage.getItem(STORE_KEY);
       if (!raw) return emptyState();
       return normalize(JSON.parse(raw));
     } catch (e) {
+      // Unlesbarer Stand: Rohdaten beiseitelegen statt sie beim nächsten Speichern zu überschreiben
+      try { if (raw) storage.setItem(STORE_KEY + '-unlesbar', raw); } catch (e2) { /* egal */ }
       return emptyState();
     }
   }
@@ -443,6 +513,164 @@
     return s + '</svg>';
   }
 
+  // ------------------------------------------------------------ Schritte und Ausdauer (von der Huawei-Uhr abgelesen)
+  function fmtInt(state, n) {
+    if (n === null || n === undefined) return '–';
+    var sep = state.settings.lang === 'en' ? ',' : '.';
+    return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, sep);
+  }
+  function roundTo(n, d) {
+    if (n === null || n === undefined) return null;
+    var f = Math.pow(10, d);
+    return Math.round(n * f) / f;
+  }
+  // Schritte: "16240", "16.240", "16,240" oder "16 240" → 16240. Sonst null.
+  function parseSteps(v) {
+    var s = String(v === null || v === undefined ? '' : v).replace(/[\s.,'’  ]/g, '');
+    if (!/^\d{1,6}$/.test(s)) return null;
+    var n = parseInt(s, 10);
+    return n <= STEPS_MAX ? n : null;
+  }
+  function setSteps(state, date, value) {
+    var n = parseSteps(value);
+    if (!isDate(date) || n === null) throw new Error('Schritte fehlerhaft');
+    state.steps[date] = n;
+    return n;
+  }
+  function deleteSteps(state, date) { delete state.steps[date]; }
+  // Dauer in Minuten: "38", "38,5", "38:12" (Min:Sek) oder "0:38:12" (Std:Min:Sek wie auf der Uhr)
+  function parseDuration(v) {
+    var s = String(v === null || v === undefined ? '' : v).trim(), m;
+    if ((m = /^(\d{1,2}):(\d{1,2}):(\d{1,2})$/.exec(s))) return roundTo(+m[1] * 60 + +m[2] + +m[3] / 60, 1);
+    if ((m = /^(\d{1,3}):(\d{1,2})$/.exec(s))) return roundTo(+m[1] + +m[2] / 60, 1);
+    return roundTo(numOrNull(s), 1);
+  }
+  function numIn(v, lo, hi, optional, what) {
+    if (v === null || v === undefined) { if (optional) return null; throw new Error(what + ' fehlt'); }
+    if (typeof v !== 'number' || !isFinite(v) || v < lo || v > hi) throw new Error(what + ' fehlerhaft');
+    return v;
+  }
+  // Prüft eine Ausdauer-Einheit (Eingabe oder Import) und gibt sie in fester Form zurück. Wirft bei Fehlern.
+  function cleanUnit(c) {
+    if (!isObj(c)) throw new Error('Einheit fehlerhaft');
+    if (typeof c.id !== 'string' || !/^[A-Za-z0-9-]{1,40}$/.test(c.id)) throw new Error('Einheit ohne Kennung');
+    if (!isDate(c.date)) throw new Error('Einheit: Datum fehlerhaft');
+    if (CARDIO_TYPES.indexOf(c.type) < 0) throw new Error('Einheit: Art fehlerhaft');
+    if (c.note !== undefined && c.note !== null && typeof c.note !== 'string') throw new Error('Einheit: Notiz fehlerhaft');
+    return {
+      id: c.id, date: c.date, type: c.type,
+      min: numIn(c.min, 1, 600, false, 'Dauer'),
+      hr: numIn(c.hr, 30, 230, true, 'Puls'),
+      km: numIn(c.km, 0, 500, true, 'Distanz'),
+      kcal: numIn(c.kcal, 0, 10000, true, 'Kalorien'),
+      note: (c.note || '').slice(0, 300)
+    };
+  }
+  function sortUnits(list) {
+    list.sort(function (x, y) { return x.date < y.date ? -1 : x.date > y.date ? 1 : x.id < y.id ? -1 : x.id > y.id ? 1 : 0; });
+  }
+  function nextUnitId(state, date) {
+    var n = 1;
+    while (state.cardio.some(function (u) { return u.id === date + '-' + n; })) n++;
+    return date + '-' + n;
+  }
+  // Neue Einheit (editId leer) oder Änderung einer bestehenden. Felder kommen als Text aus dem Formular.
+  function saveUnit(state, input, editId) {
+    var e = cleanUnit({
+      id: editId || (isDate(input.date) ? nextUnitId(state, input.date) : 'x'),
+      date: input.date, type: input.type,
+      min: parseDuration(input.min),
+      hr: roundTo(numOrNull(input.hr), 0),
+      km: roundTo(numOrNull(input.km), 2),
+      kcal: roundTo(numOrNull(input.kcal), 0),
+      note: String(input.note === null || input.note === undefined ? '' : input.note).trim()
+    });
+    if (editId) {
+      var i = -1;
+      state.cardio.forEach(function (u, k) { if (u.id === editId) i = k; });
+      if (i < 0) throw new Error('Einheit nicht gefunden');
+      state.cardio[i] = e;
+    } else state.cardio.push(e);
+    sortUnits(state.cardio);
+    return e;
+  }
+  function deleteUnit(state, id) {
+    state.cardio = state.cardio.filter(function (u) { return u.id !== id; });
+  }
+  function unitsOn(state, date) {
+    return state.cardio.filter(function (u) { return u.date === date; });
+  }
+  // Schritte einer Woche (Mo–So um 'date'). Ø nur über eingetragene Tage (fehlende Tage zählen nicht als 0).
+  function weekSteps(state, date) {
+    var mon = mondayOf(date), days = [], sum = 0, n = 0;
+    for (var i = 0; i < 7; i++) {
+      var d = addDays(mon, i), v = state.steps[d];
+      if (v === undefined) v = null; else { sum += v; n++; }
+      days.push({ date: d, v: v });
+    }
+    var avg = n ? Math.round(sum / n) : null;
+    return { monday: mon, days: days, n: n, avg: avg, ok: avg !== null && avg >= STEP_GOAL };
+  }
+  // Cardio-Tag der Woche: Tag(e) mit der Mittwochs-Einheit (auch wenn im Training verschoben), sonst Mittwoch.
+  function cardioDays(state, monday) {
+    var out = [];
+    for (var i = 0; i < 7; i++) { var d = addDays(monday, i); if (sessionOf(state, d) === 'MI') out.push(d); }
+    return out.length ? out : [addDays(monday, 2)];
+  }
+  // Einordnung nur nach dem Planwert „Puls etwa 100–120“
+  function hrClass(hr) {
+    if (hr === null || hr === undefined) return null;
+    var r = Math.round(hr);
+    if (r < HR_LOW) return 'below';
+    if (r > HR_HIGH) return 'above';
+    return 'in';
+  }
+  // Mittwochs-Cardio einer Woche: Minuten gegen Vorgabe aus dem 4-Wochen-Ablauf, Ø-Puls (nach Minuten gewichtet)
+  function wedCardio(state, date, week) {
+    var w = week || weekInfo(state, date).week;
+    var target = PLAN.schedule[w - 1].cardioMin;
+    var days = cardioDays(state, mondayOf(date));
+    var units = state.cardio.filter(function (u) { return days.indexOf(u.date) >= 0 && u.type !== 'walk'; });
+    var min = 0, hrMin = 0, hrSum = 0;
+    units.forEach(function (u) { min += u.min; if (u.hr !== null) { hrMin += u.min; hrSum += u.hr * u.min; } });
+    var hr = hrMin ? Math.round(hrSum / hrMin) : null;
+    return { week: w, target: target, days: days, units: units, min: roundTo(min, 1), hr: hr, hrClass: hrClass(hr), reached: min >= target };
+  }
+  function hrText(state, cls) {
+    var k = { 'in': 'hrIn', above: 'hrAbove', below: 'hrBelow' }[cls];
+    return k ? t(state, k).replace('{lo}', HR_LOW).replace('{hi}', HR_HIGH) : t(state, 'hrNone');
+  }
+  // Balken Mo–So mit Ziellinie 15.000 (selbst gezeichnet, SVG)
+  function stepsChartSVG(state, ws, sel) {
+    var W = 360, H = 190, l = 46, r = 8, tp = 12, b = 26, lang = state.settings.lang;
+    var vmax = STEP_GOAL * 1.2;
+    ws.days.forEach(function (d) { if (d.v !== null && d.v * 1.08 > vmax) vmax = d.v * 1.08; });
+    vmax = Math.ceil(vmax / 5000) * 5000;
+    function y(v) { return Math.round((tp + (vmax - v) / vmax * (H - tp - b)) * 10) / 10; }
+    var slot = (W - l - r) / 7, bw = Math.round(slot * 0.62);
+    var s = '<svg class="chart steps" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(t(state, 'stepsTitle')) + '">';
+    for (var g = 0; g <= vmax; g += 5000) {
+      s += '<line x1="' + l + '" x2="' + (W - r) + '" y1="' + y(g) + '" y2="' + y(g) + '" class="grid" stroke="#273239" stroke-width="1"/>';
+      s += '<text x="' + (l - 6) + '" y="' + (y(g) + 4) + '" class="ax" fill="#93a2ab" font-size="11" text-anchor="end">' + esc(fmtInt(state, g)) + '</text>';
+    }
+    ws.days.forEach(function (d, i) {
+      var cx = Math.round((l + slot * i + slot / 2) * 10) / 10;
+      if (d.v !== null && d.v > 0) {
+        var top = y(d.v), on = d.v >= STEP_GOAL;
+        s += '<rect class="sbar' + (on ? ' ok' : '') + '" x="' + Math.round(cx - bw / 2) + '" y="' + top + '" width="' + bw + '" height="' + Math.round((y(0) - top) * 10) / 10 + '" rx="4" fill="' + (on ? '#4fb38a' : '#5d7480') + '"/>';
+      }
+      s += '<text x="' + cx + '" y="' + (H - 8) + '" class="ax' + (d.date === sel ? ' sel' : '') + '" fill="' + (d.date === sel ? '#e6ecef' : '#93a2ab') + '" font-size="12" text-anchor="middle"' + (d.date === sel ? ' font-weight="700"' : '') + '>' + esc(PLAN.dayShort[lang][i]) + '</text>';
+    });
+    s += '<line class="goal" x1="' + l + '" x2="' + (W - r) + '" y1="' + y(STEP_GOAL) + '" y2="' + y(STEP_GOAL) + '" stroke="#e0a84e" stroke-width="2" stroke-dasharray="6 4"/>';
+    return s + '</svg>';
+  }
+  // Fortschritt Minuten gegen Vorgabe (SVG statt Inline-Stil, wegen der Content-Security-Policy)
+  function progressSVG(val, target) {
+    var W = 300, f = target > 0 ? Math.min(val / target, 1) : 0;
+    return '<svg class="prog" viewBox="0 0 ' + W + ' 12" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="' + W + '" height="12" rx="6" fill="#273239"/>' +
+      (f > 0 ? '<rect x="0" y="0" width="' + Math.max(12, Math.round(W * f)) + '" height="12" rx="6" fill="' + (val >= target ? '#4fb38a' : '#2e7d5f') + '"/>' : '') + '</svg>';
+  }
+
   // ------------------------------------------------------------ Einkauf
   function shopToggle(state, key) {
     if (state.shop[key]) delete state.shop[key]; else state.shop[key] = true;
@@ -566,8 +794,12 @@
   function viewCardio(state, ui, date, wi, sch) {
     var w = state.workouts[date] || {}, x = w.x || {};
     var u = t(state, 'minutes');
+    var got = 0;
+    unitsOn(state, date).forEach(function (e) { if (e.type !== 'walk') got += e.min; });
     return '<section class="card ex"><div class="exh"><h3>' + esc(t(state, 'cardio')) + '</h3><span class="sets">' + sch.cardioMin + ' ' + esc(u) + '</span></div>' +
-      '<label class="check big"><input type="checkbox" data-act="extra"' + a('key', 'cardio') + (x.cardio ? ' checked' : '') + '> ' + esc(t(state, 'done')) + '</label></section>' +
+      '<label class="check big"><input type="checkbox" data-act="extra"' + a('key', 'cardio') + (x.cardio ? ' checked' : '') + '> ' + esc(t(state, 'done')) + '</label>' +
+      '<div class="row between gocardio"><span class="muted small">' + (got ? esc(t(state, 'cardioEntered').replace('{a}', fmtNum(state, roundTo(got, 1)))) : '') + '</span>' +
+      btn('gocardio', esc(t(state, 'cardioEnter')) + ' ›', a('date', date), 'btn small ghost') + '</div></section>' +
       '<section class="card ex"><div class="exh"><h3>' + esc(t(state, 'mobility')) + '</h3><span class="sets">10 ' + esc(u) + '</span></div>' +
       '<label class="check big"><input type="checkbox" data-act="extra"' + a('key', 'mobility') + (x.mobility ? ' checked' : '') + '> ' + esc(t(state, 'done')) + '</label></section>';
   }
@@ -741,6 +973,108 @@
     return h;
   }
 
+  // ------------------------------------------------------------ Ansicht Ausdauer (Schritte + Einheiten + Woche)
+  function dayLabel(state, d) { return PLAN.dayShort[state.settings.lang][weekday(d)] + ' ' + fmtDate(state, d); }
+  function unitRow(state, u, withDate) {
+    var parts = [fmtNum(state, u.min) + ' ' + t(state, 'durationUnit')];
+    if (u.km !== null) parts.push(fmtNum(state, u.km) + ' ' + t(state, 'kmUnit'));
+    if (u.kcal !== null) parts.push(fmtInt(state, u.kcal) + ' ' + t(state, 'kcalUnit'));
+    var cls = hrClass(u.hr);
+    return '<div class="unit"><div class="unith"><b>' + (withDate ? esc(dayLabel(state, u.date)) + ' · ' : '') + esc(UI[state.settings.lang].types[u.type]) + '</b>' +
+      '<span class="unitv">' + esc(parts.join(' · ')) + '</span></div>' +
+      (u.hr !== null ? '<div class="small">' + esc(t(state, 'avgHrShort') + ' ' + fmtInt(state, u.hr) + ' ' + t(state, 'hrUnit')) + ' <span class="hrc ' + cls + '">' + esc(hrText(state, cls)) + '</span></div>' : '') +
+      (u.note ? '<div class="small muted">' + esc(u.note) + '</div>' : '') +
+      '<div class="row gap">' + btn('cedit', esc(t(state, 'edit')), a('id', u.id), 'btn small ghost') +
+      btn('cdel', esc(t(state, 'del')), a('id', u.id), 'btn small ghost dangerg') + '</div></div>';
+  }
+  function numField(state, name, label, unit, val, opt, attrs) {
+    return '<label class="fld"><small>' + esc(label) + ' (' + esc(unit) + ')</small>' +
+      '<input ' + attrs + ' name="' + name + '" value="' + (val === null || val === undefined ? '' : esc(val)) + '"' + (opt ? ' placeholder="' + esc(t(state, 'optional')) + '"' : '') + '></label>';
+  }
+  function viewEndurance(state, ui) {
+    var lang = state.settings.lang, date = isDate(ui.cDate) ? ui.cDate : ui.today, h = '';
+    var types = UI[lang].types;
+    h += '<p class="note">' + esc(t(state, 'huaweiNote')) + '</p>';
+
+    // Tag wählen + Schritte
+    var sv = state.steps[date];
+    h += '<section class="card"><h2>' + esc(t(state, 'stepsTitle')) + '</h2><div class="daypick">' +
+      btn('cday', '‹', a('date', addDays(date, -1)) + ' aria-label="' + esc(t(state, 'prevDay')) + '"', 'btn ghost') +
+      '<input type="date" data-in="cdate" value="' + esc(date) + '" aria-label="' + esc(t(state, 'date')) + '">' +
+      btn('cday', '›', a('date', addDays(date, 1)) + ' aria-label="' + esc(t(state, 'nextDay')) + '"', 'btn ghost') + '</div>' +
+      (date !== ui.today ? '<div class="row gap">' + btn('cday', esc(t(state, 'today')), a('date', ui.today), 'btn small') + '</div>' : '');
+    h += '<form class="stepsf" data-form="steps"><label class="fld big"><small>' + esc(t(state, 'stepsLabel').replace('{d}', dayLabel(state, date))) + '</small>' +
+      '<input type="text" inputmode="numeric" autocomplete="off" enterkeyhint="done" maxlength="8" name="steps" value="' + (sv === undefined ? '' : esc(sv)) + '"></label>' +
+      '<button type="submit" class="btn primary big">' + esc(t(state, 'stepsSave')) + '</button>' +
+      (ui.sMsg ? '<p class="msg">' + esc(ui.sMsg) + '</p>' : '') + '</form>';
+    h += '<div class="row between stepsinfo"><span class="muted small">' + esc(sv === undefined ? t(state, 'stepsNone') : t(state, 'stepsHave').replace('{n}', fmtInt(state, sv))) + '</span>' +
+      (sv === undefined ? '' : btn('stepsdel', esc(t(state, 'stepsDel')), a('date', date), 'btn small ghost')) + '</div></section>';
+
+    // Ausdauer-Einheit eintragen/ändern
+    var edit = ui.cEdit ? state.cardio.filter(function (u) { return u.id === ui.cEdit; })[0] : null;
+    var f = edit || { type: CARDIO_TYPES.indexOf(ui.cType) >= 0 ? ui.cType : 'bike', min: null, hr: null, km: null, kcal: null, note: '' };
+    h += '<section class="card"><h2>' + esc(t(state, 'unitTitle')) + ' <small class="muted">' + esc(t(state, 'unitOn').replace('{d}', dayLabel(state, date))) + '</small></h2>' +
+      '<form class="bodyf unitf" data-form="cardio"><div class="chips" role="radiogroup" aria-label="' + esc(t(state, 'type')) + '">' +
+      CARDIO_TYPES.map(function (k) {
+        return '<label class="chip"><input type="radio" name="type" value="' + k + '"' + (f.type === k ? ' checked' : '') + '><span>' + esc(types[k]) + '</span></label>';
+      }).join('') + '</div>' +
+      numField(state, 'min', t(state, 'duration'), t(state, 'durationUnit'), f.min, false, 'type="text" inputmode="decimal" autocomplete="off" maxlength="8"') +
+      numField(state, 'hr', t(state, 'avgHr'), t(state, 'hrUnit'), f.hr, false, 'type="number" inputmode="numeric" step="1" min="30" max="230"') +
+      numField(state, 'km', t(state, 'distance'), t(state, 'kmUnit'), f.km, true, 'type="number" inputmode="decimal" step="0.01" min="0" max="500"') +
+      numField(state, 'kcal', t(state, 'activeKcal'), t(state, 'kcalUnit'), f.kcal, true, 'type="number" inputmode="numeric" step="1" min="0" max="10000"') +
+      '<label class="fld wide"><small>' + esc(t(state, 'note')) + '</small><input type="text" name="note" maxlength="300" autocomplete="off" value="' + esc(f.note) + '" placeholder="' + esc(t(state, 'optional')) + '"></label>' +
+      '<button type="submit" class="btn primary">' + esc(t(state, edit ? 'unitUpdate' : 'unitSave')) + '</button>' +
+      (edit ? btn('ccancel', esc(t(state, 'cancel')), '', 'btn ghost wide') : '') +
+      (ui.cMsg ? '<p class="msg">' + esc(ui.cMsg) + '</p>' : '') + '</form>';
+    var dayUnits = unitsOn(state, date);
+    h += '<h3>' + esc(t(state, 'unitsDay')) + '</h3>' + (dayUnits.length ? dayUnits.map(function (u) { return unitRow(state, u, false); }).join('') : '<p class="muted small">' + esc(t(state, 'noUnits')) + '</p>') + '</section>';
+
+    // Wochenübersicht (Woche aus dem 4-Wochen-Ablauf)
+    var wi = weekInfo(state, date), ws = weekSteps(state, date), wc = wedCardio(state, date, wi.week), mon = ws.monday;
+    var weekLabel = t(state, 'week') + ' ' + wi.week + ' ' + t(state, 'of') + ' 4';
+    if (wi.phase === 'before') weekLabel += ' · ' + t(state, 'beforeStart');
+    if (wi.phase === 'after') weekLabel = t(state, 'afterEnd') + ' (' + t(state, 'week') + ' ' + wi.raw + ')';
+    h += '<section class="card"><div class="row between"><h2>' + esc(t(state, 'weekOverview')) + '</h2><span class="pill">' + esc(fmtDate(state, mon) + '–' + fmtDate(state, addDays(mon, 6))) + '</span></div>' +
+      '<p class="muted small">' + esc(weekLabel) + '</p>' +
+      '<div class="row gap weeknav">' + btn('cday', '‹ ' + esc(t(state, 'prevWeek')), a('date', addDays(date, -7)), 'btn small ghost') +
+      btn('cday', esc(t(state, 'nextWeek')) + ' ›', a('date', addDays(date, 7)), 'btn small ghost') + '</div>';
+    h += '<h3>' + esc(t(state, 'stepsAvg')) + '</h3>';
+    if (ws.avg === null) h += '<p class="muted">' + esc(t(state, 'noStepsWeek')) + '</p>';
+    else {
+      h += '<div class="big-num"><b>' + esc(fmtInt(state, ws.avg)) + '</b> <span class="hrc ' + (ws.ok ? 'in' : 'below') + '">' +
+        esc(ws.ok ? t(state, 'stepsOk') : t(state, 'stepsUnder').replace('{n}', fmtInt(state, STEP_GOAL))) + '</span></div>' +
+        '<p class="muted small">' + esc(t(state, 'daysEntered').replace('{n}', ws.n)) + '</p>';
+    }
+    h += '<p class="small"><i class="lg goal"></i> ' + esc(t(state, 'stepsGoal').replace('{n}', fmtInt(state, STEP_GOAL))) + '</p>';
+    h += stepsChartSVG(state, ws, date);
+    h += '<nav class="days steps">' + ws.days.map(function (d, i) {
+      return '<button type="button" class="dayb' + (d.date === date ? ' on' : '') + (d.date === ui.today ? ' today' : '') + '" data-act="cday"' + a('date', d.date) + '>' +
+        '<span>' + esc(PLAN.dayShort[lang][i]) + '</span><small>' + esc(d.v === null ? '–' : fmtInt(state, d.v)) + '</small></button>';
+    }).join('') + '</nav>';
+
+    h += '<h3>' + esc(t(state, 'wedCardio')) + ' <small class="muted">' + esc(wc.days.map(function (d) { return dayLabel(state, d); }).join(', ')) + '</small></h3>';
+    h += '<div class="big-num"><b>' + esc(t(state, 'cardioOf').replace('{a}', fmtNum(state, wc.min)).replace('{m}', wc.target)) + '</b></div>' + progressSVG(wc.min, wc.target);
+    h += '<p class="muted small">' + esc(t(state, 'cardioTarget').replace('{w}', wc.week).replace('{m}', wc.target)) + '<br>' + esc(t(state, 'hrPlan').replace('{lo}', HR_LOW).replace('{hi}', HR_HIGH)) + '</p>';
+    if (!wc.units.length) h += '<p class="muted">' + esc(t(state, 'noCardioDay')) + '</p>';
+    else h += '<p>' + esc(t(state, 'avgHrShort')) + ' <b>' + (wc.hr === null ? '–' : esc(fmtInt(state, wc.hr) + ' ' + t(state, 'hrUnit'))) + '</b> <span class="hrc ' + (wc.hrClass || 'none') + '">' + esc(hrText(state, wc.hrClass)) + '</span></p>';
+    h += '<p class="muted small">' + esc(t(state, 'cardioRule')) + '</p><p class="muted small">' + esc(t(state, 'finisherHere')) + '</p>';
+    // weitere Einheiten der Woche (die des gewählten Tages stehen schon oben)
+    var weekUnits = state.cardio.filter(function (u) { return u.date >= mon && u.date <= addDays(mon, 6) && u.date !== date; });
+    if (weekUnits.length) h += '<h3>' + esc(t(state, 'unitsWeek')) + '</h3>' + weekUnits.map(function (u) { return unitRow(state, u, true); }).join('');
+    h += '</section>';
+
+    // Alle 4 Wochen (wie die Spalte „Schritte Ø“ in der Wochentabelle des Plans)
+    var start = mondayOf(state.settings.start);
+    h += '<section class="card"><h2>' + esc(t(state, 'allWeeks')) + '</h2><table class="tbl"><thead><tr><th>' + esc(t(state, 'week')) + '</th><th>' + esc(t(state, 'stepsAvg')) + '</th><th>' + esc(t(state, 'cardioShort')) + '</th><th>' + esc(t(state, 'avgHrShort')) + '</th></tr></thead><tbody>';
+    for (var w = 1; w <= 4; w++) {
+      var m0 = addDays(start, (w - 1) * 7), s0 = weekSteps(state, m0), c0 = wedCardio(state, m0, w);
+      h += '<tr' + (m0 === mon ? ' class="on"' : '') + '><td><b>' + w + '</b> <small class="muted">' + esc(fmtDate(state, m0)) + '</small></td><td>' + esc(fmtInt(state, s0.avg)) + '</td><td>' +
+        esc(fmtNum(state, c0.min) + ' / ' + c0.target) + '</td><td>' + esc(c0.hr === null ? '–' : fmtInt(state, c0.hr)) + '</td></tr>';
+    }
+    h += '</tbody></table></section>';
+    return h;
+  }
+
   function viewMore(state, ui) {
     var s = state.settings, h = '';
     h += '<section class="card"><h2>' + esc(t(state, 'settings')) + '</h2>';
@@ -786,14 +1120,18 @@
     food: '<path d="M3 11h18a9 9 0 0 1-18 0zM8 7c0-2 2-2 2-4M13 7c0-2 2-2 2-4"/>',
     shop: '<path d="M3 4h2l2.5 11h10L20 8H6.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="16" cy="19" r="1.5"/>',
     body: '<path d="M4 4v16h16"/><path d="M7 15l4-5 3 3 5-6"/>',
+    cardio: '<path d="M2 12h4l2.5-6 4 12 3-9 1.5 3H22"/>',
     more: '<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>'
   };
   function icon(k) {
     return '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICON[k] + '</svg>';
   }
-  var TABS = [['training', 'tabTraining'], ['food', 'tabFood'], ['shop', 'tabShop'], ['body', 'tabBody'], ['more', 'tabMore']];
+  // Reiter „Ausdauer“ steht neben „Körper“: die ersten vier Reiter bleiben an ihrem Platz, „Mehr“ bleibt rechts außen.
+  var TABS = [['training', 'tabTraining'], ['food', 'tabFood'], ['shop', 'tabShop'], ['body', 'tabBody'], ['cardio', 'tabCardio'], ['more', 'tabMore']];
   function render(state, ui) {
-    var view = { training: viewTraining, food: viewFood, shop: viewShop, body: viewBody, more: viewMore }[ui.tab] || viewTraining;
+    var views = { training: viewTraining, food: viewFood, shop: viewShop, body: viewBody, cardio: viewEndurance, more: viewMore };
+    if (!views[ui.tab]) ui.tab = 'training';
+    var view = views[ui.tab];
     var h = '<header class="top"><h1>' + esc(t(state, TABS.filter(function (x) { return x[0] === ui.tab; })[0][1])) + '</h1></header>';
     h += '<main id="main">' + view(state, ui) + '</main>';
     h += '<div id="timer">' + viewTimer(state, ui) + '</div>';
@@ -815,7 +1153,11 @@
     timerStart: timerStart, timerRemaining: timerRemaining, timerAdd: timerAdd, fmtClock: fmtClock,
     saveBody: saveBody, deleteBody: deleteBody, navyBf: navyBf, saveNavy: saveNavy, fmtNum: fmtNum, series: series, avg7: avg7, chartSVG: chartSVG,
     shopToggle: shopToggle, shopKeys: shopKeys, shopReset: shopReset, shopCount: shopCount,
-    render: render, viewTimer: viewTimer, viewVideo: viewVideo, videoId: videoId, EMBED: EMBED
+    render: render, viewTimer: viewTimer, viewVideo: viewVideo, videoId: videoId, EMBED: EMBED,
+    STEP_GOAL: STEP_GOAL, HR_LOW: HR_LOW, HR_HIGH: HR_HIGH, CARDIO_TYPES: CARDIO_TYPES, TABS: TABS,
+    fmtInt: fmtInt, parseSteps: parseSteps, setSteps: setSteps, deleteSteps: deleteSteps, parseDuration: parseDuration,
+    saveUnit: saveUnit, deleteUnit: deleteUnit, unitsOn: unitsOn, weekSteps: weekSteps, cardioDays: cardioDays,
+    hrClass: hrClass, wedCardio: wedCardio, stepsChartSVG: stepsChartSVG, viewEndurance: viewEndurance
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = Core; else root.Core = Core;
 })(this);
