@@ -78,7 +78,7 @@
       wedCardio: 'Mittwochs-Cardio', cardioTarget: 'Vorgabe Woche {w}: {m} Min.', cardioOf: '{a} von {m} Min.',
       hrPlan: 'Plan: Puls etwa {lo}–{hi}', hrIn: 'im Bereich {lo}–{hi}', hrAbove: 'darüber', hrBelow: 'darunter', hrNone: 'kein Puls eingetragen',
       avgHrShort: 'Ø Puls', noCardioDay: 'Am Cardio-Tag ist noch keine Einheit eingetragen.',
-      cardioRule: 'Gezählt werden die Einheiten am Cardio-Tag (Mittwoch oder der Tag, auf den du die Einheit im Training gelegt hast), außer „Gehen“. Gehen zählt zu den Schritten.',
+      cardioRule: 'Gezählt werden alle Einheiten am Cardio-Tag (Mittwoch oder der Tag, auf den du die Einheit im Training gelegt hast), auch „Gehen“.',
       finisherHere: 'Den Finisher am Freitag (ab Woche 2) trägst du im Training ein, nicht hier.',
       allWeeks: 'Alle 4 Wochen', cardioShort: 'Cardio Mi', cardioEnter: 'Ausdauer eintragen', cardioEntered: 'Eingetragen: {a} Min.'
     },
@@ -144,7 +144,7 @@
       wedCardio: 'Wednesday cardio', cardioTarget: 'Week {w} target: {m} min', cardioOf: '{a} of {m} min',
       hrPlan: 'Plan: heart rate about {lo}–{hi}', hrIn: 'in the {lo}–{hi} range', hrAbove: 'above', hrBelow: 'below', hrNone: 'no heart rate entered',
       avgHrShort: 'Avg HR', noCardioDay: 'No session entered on the cardio day yet.',
-      cardioRule: 'Counted: the sessions on the cardio day (Wednesday, or the day you moved that session to under Training), except “Walk”. Walking counts towards the steps.',
+      cardioRule: 'Counted: all sessions on the cardio day (Wednesday, or the day you moved that session to under Training), including “Walk”.',
       finisherHere: 'Enter the Friday finisher (from week 2) under Training, not here.',
       allWeeks: 'All 4 weeks', cardioShort: 'Cardio Wed', cardioEnter: 'Enter endurance', cardioEntered: 'Entered: {a} min'
     }
@@ -630,7 +630,8 @@
     var w = week || weekInfo(state, date).week;
     var target = PLAN.schedule[w - 1].cardioMin;
     var days = cardioDays(state, mondayOf(date));
-    var units = state.cardio.filter(function (u) { return days.indexOf(u.date) >= 0 && u.type !== 'walk'; });
+    // Carsten 14.10.2026: Gehen zählt am Cardio-Tag mit
+    var units = state.cardio.filter(function (u) { return days.indexOf(u.date) >= 0; });
     var min = 0, hrMin = 0, hrSum = 0;
     units.forEach(function (u) { min += u.min; if (u.hr !== null) { hrMin += u.min; hrSum += u.hr * u.min; } });
     var hr = hrMin ? Math.round(hrSum / hrMin) : null;
@@ -795,7 +796,7 @@
     var w = state.workouts[date] || {}, x = w.x || {};
     var u = t(state, 'minutes');
     var got = 0;
-    unitsOn(state, date).forEach(function (e) { if (e.type !== 'walk') got += e.min; });
+    unitsOn(state, date).forEach(function (e) { got += e.min; });
     return '<section class="card ex"><div class="exh"><h3>' + esc(t(state, 'cardio')) + '</h3><span class="sets">' + sch.cardioMin + ' ' + esc(u) + '</span></div>' +
       '<label class="check big"><input type="checkbox" data-act="extra"' + a('key', 'cardio') + (x.cardio ? ' checked' : '') + '> ' + esc(t(state, 'done')) + '</label>' +
       '<div class="row between gocardio"><span class="muted small">' + (got ? esc(t(state, 'cardioEntered').replace('{a}', fmtNum(state, roundTo(got, 1)))) : '') + '</span>' +
