@@ -1,0 +1,289 @@
+[
+ {
+  "id": "brustpresse",
+  "uebung": "Brustpresse (Maschine)",
+  "url": "https://www.youtube.com/watch?v=xUm0BiZCWlQ",
+  "title": "How To: Chest Press (Cybex)",
+  "channel": "ScottHermanFitness",
+  "channel_url": "https://www.youtube.com/@ScottHermanFitness",
+  "grund": "How-To an der Brustpresse, bekannter Kanal"
+ },
+ {
+  "id": "latzug-breit",
+  "uebung": "Latzug breit (Latissimus)",
+  "url": "https://www.youtube.com/watch?v=7JnP8dFbS14",
+  "title": "How To Do A Wide Grip Lat Pulldown",
+  "channel": "PureGym",
+  "channel_url": "https://www.youtube.com/@PureGymVideo",
+  "grund": "genau der breite Griff, Personal-Trainer-Demo"
+ },
+ {
+  "id": "schulterdruecken-kh",
+  "uebung": "Schulterdrücken sitzend, Kurzhanteln",
+  "url": "https://www.youtube.com/watch?v=lfb3ffbrd4Q",
+  "title": "Seated Dumbbell Press | Shoulders | How-To Exercise Tutorial",
+  "channel": "Buff Dudes Workouts",
+  "channel_url": "https://www.youtube.com/@BuffDudesWorkouts",
+  "grund": "How-To sitzend mit Kurzhanteln"
+ },
+ {
+  "id": "rudern-sitzend",
+  "uebung": "Rudern sitzend (Maschine oder Kabel)",
+  "url": "https://www.youtube.com/watch?v=xQNrFHEMhI4",
+  "title": "Seated Cable Row | Exercise Guide",
+  "channel": "Bodybuilding.com",
+  "channel_url": "https://www.youtube.com/@bodybuildingcom",
+  "grund": "Exercise Guide Kabelrudern sitzend"
+ },
+ {
+  "id": "seitheben",
+  "uebung": "Seitheben, Kurzhanteln",
+  "url": "https://www.youtube.com/watch?v=XPPfnSEATJA",
+  "title": "How to do a Dumbbell Lateral Raise",
+  "channel": "National Academy of Sports Medicine (NASM)",
+  "channel_url": "https://www.youtube.com/@NasmOrgPersonalTrainer",
+  "grund": "NASM-Demo, nur bis Schulterhöhe"
+ },
+ {
+  "id": "trizeps-kabel",
+  "uebung": "Trizepsdrücken am Kabel (Tower)",
+  "url": "https://www.youtube.com/watch?v=2-LAMcpzODU",
+  "title": "How To: Tricep Pushdown (Life Fitness Cable)",
+  "channel": "ScottHermanFitness",
+  "channel_url": "https://www.youtube.com/@ScottHermanFitness",
+  "grund": "How-To Trizepsdrücken am Kabel"
+ },
+ {
+  "id": "bizeps-curls",
+  "uebung": "Bizeps-Curls, Kurzhanteln",
+  "url": "https://www.youtube.com/watch?v=XE_pHwbst04",
+  "title": "Bicep Curls — (DUMBBELL FORM & TECHNIQUE)",
+  "channel": "Fit Father Project - Fitness For Busy Fathers",
+  "channel_url": "https://www.youtube.com/@Fitfatherproject",
+  "grund": "ruhige Technik-Erklärung Kurzhantel-Curls"
+ },
+ {
+  "id": "beinpresse",
+  "uebung": "Beinpresse (Beinmaschine)",
+  "url": "https://www.youtube.com/watch?v=IZxyjW7MPJQ",
+  "title": "How To: Seated Leg Press (Cybex)",
+  "channel": "ScottHermanFitness",
+  "channel_url": "https://www.youtube.com/@ScottHermanFitness",
+  "grund": "How-To sitzende Beinpresse"
+ },
+ {
+  "id": "goblet-squat-bank",
+  "uebung": "Goblet Squat auf die Bank",
+  "url": "https://www.youtube.com/watch?v=4pbWohi6z_U",
+  "title": "How to Do a Goblet Squat to Box",
+  "channel": "Jon Hodgkinson Golf Fitness",
+  "channel_url": "https://www.youtube.com/@golffitness",
+  "grund": "zeigt genau den Goblet Squat bis zur Box/Bank"
+ },
+ {
+  "id": "rdl-kh",
+  "uebung": "Rumänisches Kreuzheben, Kurzhanteln",
+  "url": "https://www.youtube.com/watch?v=FQKfr1YDhEk",
+  "title": "How To: Dumbbell Romanian Deadlift",
+  "channel": "ScottHermanFitness",
+  "channel_url": "https://www.youtube.com/@ScottHermanFitness",
+  "grund": "How-To genau mit Kurzhanteln"
+ },
+ {
+  "id": "ausfallschritt-rueck",
+  "uebung": "Ausfallschritt rückwärts",
+  "url": "https://www.youtube.com/watch?v=xrPteyQLGAo",
+  "title": "How To Reverse Lunge",
+  "channel": "PureGym",
+  "channel_url": "https://www.youtube.com/@PureGymVideo",
+  "grund": "Personal-Trainer-Demo Reverse Lunge"
+ },
+ {
+  "id": "wadenheben-a",
+  "uebung": "Wadenheben (Beinpresse oder stehend)",
+  "url": "https://www.youtube.com/watch?v=XdtWVYFVhGU",
+  "title": "Calf Raises on the Leg Press (90 Second Instruction)",
+  "channel": "Seriously Strong Training",
+  "channel_url": "https://www.youtube.com/@SeriouslyStrongTraining",
+  "grund": "Wadenheben an der Beinpresse"
+ },
+ {
+  "id": "pallof-press",
+  "uebung": "Pallof-Press am Kabel",
+  "url": "https://www.youtube.com/watch?v=_2xWmYNnFS8",
+  "title": "How to Do the Pallof Press (Perfect Form for a Stronger Core)",
+  "channel": "Colossus Fitness",
+  "channel_url": "https://www.youtube.com/@ColossusFitness",
+  "grund": "Abstand, Stand, Drückweg, Fehler"
+ },
+ {
+  "id": "plank",
+  "uebung": "Unterarmstütz (Plank)",
+  "url": "https://www.youtube.com/watch?v=mwlp75MS6Rg",
+  "title": "How to do a Plank | Proper Form & Technique | NASM",
+  "channel": "National Academy of Sports Medicine (NASM)",
+  "channel_url": "https://www.youtube.com/@NasmOrgPersonalTrainer",
+  "grund": "NASM-Demo Unterarmstütz"
+ },
+ {
+  "id": "latzug-eng",
+  "uebung": "Latzug eng (Untergriff oder neutral)",
+  "url": "https://www.youtube.com/watch?v=KgZqDuNx7rI",
+  "title": "The BEST way to Perform the Neutral Grip Lat Pulldown | Form Tutorial",
+  "channel": "Physique Development",
+  "channel_url": "https://www.youtube.com/@PhysiqueDevelopment",
+  "grund": "Form-Tutorial neutraler Griff"
+ },
+ {
+  "id": "kh-rudern-einarmig",
+  "uebung": "Einarmiges Kurzhantelrudern auf der Bank",
+  "url": "https://www.youtube.com/watch?v=nMFCMNKnLgQ",
+  "title": "How to Perform Single Arm Dumbbell Rows | Back Size Exercise Tutorial",
+  "channel": "Buff Dudes Workouts",
+  "channel_url": "https://www.youtube.com/@BuffDudesWorkouts",
+  "grund": "Tutorial einarmiges Kurzhantelrudern"
+ },
+ {
+  "id": "schraegbank-kh",
+  "uebung": "Schrägbankdrücken, Kurzhanteln",
+  "url": "https://www.youtube.com/watch?v=IP4oeKh1Sd4",
+  "title": "How to do the INCLINE DUMBBELL BENCH PRESS! | 2 Minute Tutorial",
+  "channel": "Max Euceda",
+  "channel_url": "https://www.youtube.com/@MaxEuceda7",
+  "grund": "Bankwinkel, Ellbogen, Absenken"
+ },
+ {
+  "id": "face-pull",
+  "uebung": "Face Pulls am Kabel (Seil)",
+  "url": "https://www.youtube.com/watch?v=ljgqer1ZpXg",
+  "title": "STOP F*cking Up Face Pulls (PROPER FORM!)",
+  "channel": "ATHLEAN-X™",
+  "channel_url": "https://www.youtube.com/@athleanx",
+  "grund": "Physiotherapeut, Seilgriff und Kabelhöhe sehr genau"
+ },
+ {
+  "id": "fliegende-kabel",
+  "uebung": "Fliegende am Kabel oder Brustmaschine leicht",
+  "url": "https://www.youtube.com/watch?v=Iwe6AmxVf7o",
+  "title": "How To: High Cable Chest Fly",
+  "channel": "ScottHermanFitness",
+  "channel_url": "https://www.youtube.com/@ScottHermanFitness",
+  "grund": "How-To Fliegende am Kabel"
+ },
+ {
+  "id": "hammer-curls",
+  "uebung": "Hammer-Curls, Kurzhanteln",
+  "url": "https://www.youtube.com/watch?v=BRVDS6HVR9Q",
+  "title": "How To Perform HAMMER CURLS | Biceps Exercise Tutorial",
+  "channel": "Buff Dudes Workouts",
+  "channel_url": "https://www.youtube.com/@BuffDudesWorkouts",
+  "grund": "How-To Hammer-Curls"
+ },
+ {
+  "id": "trizeps-ueberkopf",
+  "uebung": "Trizeps über Kopf am Kabel",
+  "url": "https://www.youtube.com/watch?v=GzmlxvSFE7A",
+  "title": "How to PROPERLY Overhead Cable Tricep Extension | Fix Your Tricep Extension Form NOW!",
+  "channel": "Colossus Fitness",
+  "channel_url": "https://www.youtube.com/@ColossusFitness",
+  "grund": "Seil-Setup, Ausführung, Fehler"
+ },
+ {
+  "id": "farmers-walk",
+  "uebung": "Farmer's Walk, schwere Kurzhanteln",
+  "url": "https://www.youtube.com/watch?v=VBobkldqqvk",
+  "title": "How To Do The FARMER'S WALK Correctly",
+  "channel": "SET FOR SET",
+  "channel_url": "https://www.youtube.com/@SETFORSET",
+  "grund": "Haltung, Griff, Schrittweite"
+ },
+ {
+  "id": "step-ups",
+  "uebung": "Step-ups auf die Bank, Kurzhanteln",
+  "url": "https://www.youtube.com/watch?v=x0cFKaepMXo",
+  "title": "How to PROPERLY Dumbbell Step Up (DO THIS NOW!)",
+  "channel": "Colossus Fitness",
+  "channel_url": "https://www.youtube.com/@ColossusFitness",
+  "grund": "Step-up mit Kurzhanteln"
+ },
+ {
+  "id": "beinpresse-hoch-breit",
+  "uebung": "Beinpresse, Füße hoch und breit",
+  "url": "https://www.youtube.com/watch?v=SHuQOYjCdZU",
+  "title": "Leg Press Foot Placement High vs Low",
+  "channel": "nutritioneering",
+  "channel_url": "https://www.youtube.com/@nutritioneering",
+  "grund": "erklärt die Fußposition hoch/breit"
+ },
+ {
+  "id": "hip-thrust",
+  "uebung": "Hüftheben (Hip Thrust), Kurzhantel",
+  "url": "https://www.youtube.com/watch?v=29OfN4ztW_g",
+  "title": "Dumbbell Hip Thrust (FULL TUTORIAL) - Glute Exercises for Beginners",
+  "channel": "Mike | J2FIT Strength & Conditioning",
+  "channel_url": "https://www.youtube.com/@j2fit",
+  "grund": "genau die Kurzhantel-Variante an der Bank"
+ },
+ {
+  "id": "beinbeuger-pullthrough",
+  "uebung": "Beinbeuger (falls vorhanden) oder Pull-Through am Kabel",
+  "url": "https://www.youtube.com/watch?v=_2Kd0d-JEUM",
+  "title": "How to do a Seated Leg Curl  | Proper Form & Technique | NASM",
+  "channel": "National Academy of Sports Medicine (NASM)",
+  "channel_url": "https://www.youtube.com/@NasmOrgPersonalTrainer",
+  "grund": "NASM-Demo Beinbeuger sitzend (erste Wahl im Plan)"
+ },
+ {
+  "id": "beinbeuger-pullthrough:alt",
+  "uebung": "… Ersatzübung: Pull-Through am Kabel",
+  "url": "https://www.youtube.com/watch?v=4oZ_0_bQcOg",
+  "title": "How to Do Cable Pull Throughs",
+  "channel": "Chris and Eric Martinez",
+  "channel_url": "https://www.youtube.com/@chrisandericmartinez",
+  "grund": "Ausführung Pull-Through am Kabel"
+ },
+ {
+  "id": "wadenheben-b",
+  "uebung": "Wadenheben",
+  "url": "https://www.youtube.com/watch?v=XdtWVYFVhGU",
+  "title": "Calf Raises on the Leg Press (90 Second Instruction)",
+  "channel": "Seriously Strong Training",
+  "channel_url": "https://www.youtube.com/@SeriouslyStrongTraining",
+  "grund": "gleiche Übung wie Dienstag"
+ },
+ {
+  "id": "kabel-crunch",
+  "uebung": "Kabel-Crunch kniend",
+  "url": "https://www.youtube.com/watch?v=AV5PmZJIrrw",
+  "title": "How to PROPERLY Cable Crunch to Shape Your Abs (How to Kneeling Cable Abdominal Crunch)",
+  "channel": "Colossus Fitness",
+  "channel_url": "https://www.youtube.com/@ColossusFitness",
+  "grund": "Kabel-Crunch kniend, typische Fehler"
+ },
+ {
+  "id": "dead-bug",
+  "uebung": "Dead Bug",
+  "url": "https://www.youtube.com/watch?v=o4GKiEoYClI",
+  "title": "Dead Bug Exercise For Core Stability  | Pursuit Physical Therapy",
+  "channel": "Pursuit Physical Therapy",
+  "channel_url": "https://www.youtube.com/@PursuitPhysicalTherapy",
+  "grund": "Physiotherapie-Praxis, klare Demo"
+ },
+ {
+  "id": "seitstuetz",
+  "uebung": "Seitstütz",
+  "url": "https://www.youtube.com/watch?v=rCxF2nG9vQ0",
+  "title": "How to do the perfect Side Plank and most common mistakes",
+  "channel": "Get Exercise Confident",
+  "channel_url": "https://www.youtube.com/@GetExerciseConfident",
+  "grund": "Technik und häufige Fehler"
+ },
+ {
+  "id": "finisher-rad",
+  "uebung": "Finisher Fahrrad (ab Woche 2)",
+  "url": null,
+  "title": null,
+  "channel": null,
+  "grund": "kein belastbarer Technik-Clip gefunden (nur Rennrad-Bikefitting, Aufbau- und Produktvideos)"
+ }
+]
