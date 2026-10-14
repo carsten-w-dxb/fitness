@@ -101,7 +101,7 @@
     var el = ev.target.closest('[data-act]');
     if (!el || el.tagName === 'INPUT') return;
     var act = el.getAttribute('data-act'), d = el.dataset;
-    ui.msg = '';
+    ui.msg = ''; ui.navyMsg = '';
     switch (act) {
       case 'video':
         // Einzeldatei: normaler Link zu YouTube. Web-App: genau dieses Video im Fenster der App.
@@ -185,6 +185,18 @@
   });
   root.addEventListener('submit', function (ev) {
     var form = ev.target;
+    if (form.getAttribute('data-form') === 'navy') {
+      ev.preventDefault();
+      var fn = new FormData(form);
+      try {
+        var bf = C.saveNavy(state, { date: fn.get('date'), height: fn.get('height'), neck: fn.get('neck'), waist: fn.get('waist') });
+        persist();
+        ui.navyMsg = C.t(state, 'navyOk').replace('{bf}', C.fmtNum(state, bf)).replace('{w}', C.fmtNum(state, parseFloat(String(fn.get('waist')).replace(',', '.'))));
+        ui.metric = 'bf';
+      } catch (e) { ui.navyMsg = C.t(state, 'navyBad'); }
+      render(true);
+      return;
+    }
     if (form.getAttribute('data-form') !== 'body') return;
     ev.preventDefault();
     var fd = new FormData(form);
